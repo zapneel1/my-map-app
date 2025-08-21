@@ -11,7 +11,7 @@ export default function Map() {
   const map = useRef(null);
   const lat = 22.318257299063653;
   const lng = 87.30583186511298;
-  const zoom = 16;
+  const zoom = 15;
   const API_KEY = 'AGMBRAsSD2L65HSvLA4i';
   const [mapController, setMapController] = useState();
 
