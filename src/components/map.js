@@ -20,7 +20,7 @@ export default function Map() {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${API_KEY}`,
+      style: `https://api.maptiler.com/maps/hybrid/style.json?key=${API_KEY}`, //dataviz-dark
       center: [lng, lat],
       zoom: zoom
     });
