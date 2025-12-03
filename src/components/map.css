@@ -4,65 +4,57 @@
 
 .map-page {
   display: flex;
+  flex-direction: row;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Roboto, Arial, sans-serif;
 }
 
 /* =============================
-   MAP SECTION (LEFT SIDE)
-   ============================= */
-
-.map-container {
-  flex: 1;
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* =============================
-   SIDE PANEL (RIGHT SIDE)
+   SIDE PANEL (LEFT SIDE - GEE STYLE)
    ============================= */
 
 .side-panel {
   width: 320px;
-  background: rgba(15, 23, 42, 0.95);     /* dark navy w/ slight transparency */
-  color: #f1f5f9;                          /* light text */
-  padding: 18px 20px;
+  background: #ffffff;          /* white like GEE panel */
+  color: #111111;               /* near black text */
+  padding: 18px 22px;
   overflow-y: auto;
   box-sizing: border-box;
-  backdrop-filter: blur(6px);
+  border-right: 1px solid #ccc; /* light GEE border */
 }
 
+/* Title */
 .side-panel h1 {
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0 0 12px;
-  line-height: 1.3;
 }
 
+/* Subheaders */
 .side-panel h2 {
   font-size: 14px;
   font-weight: 600;
-  margin: 12px 0 6px;
+  margin: 14px 0 6px;
 }
 
+/* Body text */
 .side-panel p {
-  font-size: 13px;
-  line-height: 1.35;
+  font-size: 12.5px;
+  line-height: 1.45;
   margin: 6px 0;
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
 .panel-separator {
   border: none;
-  border-top: 1px solid rgba(148, 163, 184, 0.4);
-  margin: 12px 0;
+  border-top: 1px solid #d1d5db;
+  margin: 10px 0;
 }
 
 /* =============================
-   LEGEND STYLING
+   LEGENDS
    ============================= */
 
 .legend-block {
@@ -71,13 +63,12 @@
 
 .legend-bar {
   height: 14px;
-  width: 100%;
   border-radius: 999px;
-  margin: 5px 0 3px;
+  margin: 4px 0;
 }
 
 .legend-ndvi {
-  background: linear-gradient(to right, #654321, #facc15, #16a34a); /* brown → yellow → green */
+  background: linear-gradient(to right, #654321, #facc15, #16a34a);
 }
 
 .legend-pluck {
@@ -87,29 +78,36 @@
 }
 
 .legend-label-row {
+  font-size: 11px;
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .legend-caption {
   font-size: 11px;
+  margin-top: 4px;
   opacity: 0.85;
-  margin-top: 3px;
+}
+
+.panel-footnote {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 12px;
 }
 
 /* =============================
-   FOOTNOTE TEXT
+   MAP RIGHT SIDE
    ============================= */
 
-.panel-footnote {
-  margin-top: 12px;
-  font-size: 11px;
-  opacity: 0.6;
+.map-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-/* remove unused geocoding rule */
+/* Remove leftover geocoder */
 .geocoding {
   display: none;
 }
