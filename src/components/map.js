@@ -181,13 +181,6 @@ export default function Map() {
             separate Earth Engine model tuned for plucking cycles.
           </p>
         </div>
-
-        <hr className="panel-separator" />
-
-        <p className="panel-footnote">
-          Static web UI; interactive point inspection & charts live in the
-          Earth Engine workspace.
-        </p>
       </div>
 
       {/* RIGHT: MAP */}
