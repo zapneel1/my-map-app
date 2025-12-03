@@ -23,6 +23,8 @@
   overflow-y: auto;
   box-sizing: border-box;
   border-right: 1px solid #ccc; /* light GEE border */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Title */
@@ -47,6 +49,7 @@
   opacity: 0.9;
 }
 
+/* Separator */
 .panel-separator {
   border: none;
   border-top: 1px solid #d1d5db;
@@ -97,18 +100,17 @@
 }
 
 /* =============================
-   GOOGLE MAPS BUTTON
+   GOOGLE MAPS BUTTON (compact, premium)
    ============================= */
 
 .gmaps-button {
   display: inline-block;
-  width: 100%;
-  text-align: center;
-  padding: 10px 12px;
-  margin: 8px 0;
-  font-size: 13px;
+  align-self: flex-start;   /* Keep it compact, not full width */
+  padding: 10px 20px;       /* ample padding but smaller visual size */
+  margin: 10px 0;
+  font-size: 12px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 10px;
   border: 1px solid #2563eb;
   background-color: #2563eb;
   color: #ffffff;
