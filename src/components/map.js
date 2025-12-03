@@ -15,7 +15,9 @@ export default function Map() {
     { id: "meanNDRE", mapid: "9042c0c1e3b43ba9752c37b9307834c9-69c579e14e022a4ca430696e5ebe714e" },
     { id: "daysPrune", mapid: "a3fce59d1462a08c06ec85466c136988-3bac13757ce201ad92f91f23d57d215d" },
     { id: "s1VV", mapid: "b9d0cf266c4b018a3c06e485dad36385-48a2127152928477378ab4e1e0f1ca2a" },
-    { id: "rainfall", mapid: "d10115627b62fcc69dbfaa04491fa533-a52c41bc6ceb4b322e1b81a6e5b2ea60" }
+    { id: "rainfall", mapid: "d10115627b62fcc69dbfaa04491fa533-a52c41bc6ceb4b322e1b81a6e5b2ea60" },
+    { id: "pluckReady", mapid: "f00cdac132c1a19329e7ab9287e4acb4-ab2feff10d2172157a5e820177d19bf9" }   // <<< NEW
+]
   ];
 
   // ----------------- URL Layer Selector -----------------
