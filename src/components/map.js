@@ -10,14 +10,36 @@ export default function Map() {
 
   // ----------------- GEE Layers -----------------
   const layers = [
-    { id: "teaHealth", mapid: "d7b409f5914ed5735651fee34fb5678d-64c29149b893899ba0a6706c13b877f1" },
-    { id: "meanNDVI", mapid: "812cc2491e957c1106082c3b00f69271-1fbf791bb29491d2b9036d9b0acc6191" },
-    { id: "meanNDRE", mapid: "9042c0c1e3b43ba9752c37b9307834c9-69c579e14e022a4ca430696e5ebe714e" },
-    { id: "daysPrune", mapid: "a3fce59d1462a08c06ec85466c136988-3bac13757ce201ad92f91f23d57d215d" },
-    { id: "s1VV", mapid: "b9d0cf266c4b018a3c06e485dad36385-48a2127152928477378ab4e1e0f1ca2a" },
-    { id: "rainfall", mapid: "d10115627b62fcc69dbfaa04491fa533-a52c41bc6ceb4b322e1b81a6e5b2ea60" },
-    { id: "pluckReady", mapid: "f00cdac132c1a19329e7ab9287e4acb4-ab2feff10d2172157a5e820177d19bf9" }   // <<< NEW
-]
+    {
+      id: "teaHealth",
+      mapid: "d7b409f5914ed5735651fee34fb5678d-64c29149b893899ba0a6706c13b877f1"
+    },
+    {
+      id: "meanNDVI",
+      mapid: "812cc2491e957c1106082c3b00f69271-1fbf791bb29491d2b9036d9b0acc6191"
+    },
+    {
+      id: "meanNDRE",
+      mapid: "9042c0c1e3b43ba9752c37b9307834c9-69c579e14e022a4ca430696e5ebe714e"
+    },
+    {
+      id: "daysPrune",
+      mapid: "a3fce59d1462a08c06ec85466c136988-3bac13757ce201ad92f91f23d57d215d"
+    },
+    {
+      id: "s1VV",
+      mapid: "b9d0cf266c4b018a3c06e485dad36385-48a2127152928477378ab4e1e0f1ca2a"
+    },
+    {
+      id: "rainfall",
+      mapid: "d10115627b62fcc69dbfaa04491fa533-a52c41bc6ceb4b322e1b81a6e5b2ea60"
+    },
+    {
+      id: "pluckReady",
+      // use full URL, but with REAL {z}/{x}/{y}, not %7Bz%7D...
+      tileUrl:
+        "https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/f00cdac132c1a19329e7ab9287e4acb4-ab2feff10d2172157a5e820177d19bf9/tiles/{z}/{x}/{y}"
+    }
   ];
 
   // ----------------- URL Layer Selector -----------------
@@ -40,11 +62,14 @@ export default function Map() {
 
     map.current.on("load", () => {
       layers.forEach(layer => {
+        // either explicit tileUrl or build from mapid
+        const tileUrl = layer.tileUrl
+          ? layer.tileUrl
+          : `https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/${layer.mapid}/tiles/{z}/{x}/{y}`;
+
         map.current.addSource(layer.id, {
           type: "raster",
-          tiles: [
-            `https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/${layer.mapid}/tiles/{z}/{x}/{y}`
-          ],
+          tiles: [tileUrl],
           tileSize: 256
         });
 
@@ -52,8 +77,12 @@ export default function Map() {
           id: layer.id,
           type: "raster",
           source: layer.id,
-          layout: { visibility: layer.id === selectedLayerId ? "visible" : "none" },
-          paint: { "raster-opacity": 0.85 }
+          layout: {
+            visibility: layer.id === selectedLayerId ? "visible" : "none"
+          },
+          paint: {
+            "raster-opacity": 0.85
+          }
         });
       });
 
@@ -67,20 +96,18 @@ export default function Map() {
     });
   }, [API_KEY, selectedLayerId]);
 
-  // --------------------------------------------------------
-  // RENDER PANEL (LEFT) + MAP (RIGHT)
-  // --------------------------------------------------------
+  // ----------------- UI: Panel (left) + Map (right) -----------------
   return (
     <div className="map-page">
-
       {/* LEFT: STATIC INFO PANEL */}
       <div className="side-panel">
         <h1>Tea Plantation Monitoring Dashboard</h1>
 
         <p>
-          This dashboard visualizes multi-sensor satellite layers for tea estate monitoring.
-          Switch layers via the URL parameter <b>?layer=</b> such as
-          <b> meanNDVI</b>, <b>s1VV</b>, <b>rainfall</b>.
+          This dashboard visualizes multi-sensor satellite layers for tea
+          estate monitoring. Change the active layer using the URL parameter{" "}
+          <b>?layer=</b> (e.g. <b>meanNDVI</b>, <b>s1VV</b>, <b>rainfall</b>,{" "}
+          <b>pluckReady</b>).
         </p>
 
         <hr className="panel-separator" />
@@ -93,32 +120,33 @@ export default function Map() {
             <span>High</span>
           </div>
           <p className="legend-caption">
-            Indicates canopy vigor and leaf density. Weak/patchy areas appear left side of scale.
+            Indicates canopy vigor and leaf density across the tea estate.
           </p>
         </div>
 
         <div className="legend-block">
-          <h2>Plucking Readiness Score</h2>
+          <h2>Plucking Readiness</h2>
           <div className="legend-bar legend-pluck"></div>
           <div className="legend-label-row">
-            <span>Just Plucked</span>
-            <span>Ready / Overdue</span>
+            <span>Just plucked</span>
+            <span>Ready / overdue</span>
           </div>
           <p className="legend-caption">
-            Based on NDVI time-series drop patterns representing harvest cycle stages.
+            Layer ID <b>pluckReady</b> shows NDVI-based readiness score from a
+            separate Earth Engine model tuned for plucking cycles.
           </p>
         </div>
 
         <hr className="panel-separator" />
 
         <p className="panel-footnote">
-          Prototype static UI — interactive analytics & charts are in the Earth Engine version.
+          Static web UI; interactive point inspection & charts live in the
+          Earth Engine workspace.
         </p>
       </div>
 
       {/* RIGHT: MAP */}
       <div ref={mapContainer} className="map-container" />
-
     </div>
   );
 }
