@@ -150,7 +150,7 @@ export default function Map() {
             className={`gmaps-button ${!gmapsUrl ? "gmaps-button-disabled" : ""}`}
           >
             {gmapsUrl
-              ? "Open in Google Maps"
+              ? "get directions"
               : "Click on the map to set destination"}
           </a>
         </div>
