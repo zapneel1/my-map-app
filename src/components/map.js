@@ -38,7 +38,7 @@ export default function Map() {
       id: "pluckReady",
       // use full URL, but with REAL {z}/{x}/{y}, not %7Bz%7D...
       tileUrl:
-        "https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/f00cdac132c1a19329e7ab9287e4acb4-ab2feff10d2172157a5e820177d19bf9/tiles/{z}/{x}/{y}"
+        "https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/e1fb9b66cb87bea8c201c55555e88892-5662852a05d9f35535d024ef3010d237/tiles/{z}/{x}/{y}"
     }
   ];
 
