@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css';
@@ -6,6 +6,8 @@ import './map.css';
 export default function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const destMarkerRef = useRef(null);
+  const [destCoords, setDestCoords] = useState(null); // [lng, lat]
   const API_KEY = 'AGMBRAsSD2L65HSvLA4i';
 
   // ----------------- GEE Layers -----------------
@@ -36,9 +38,8 @@ export default function Map() {
     },
     {
       id: "pluckReady",
-      // use full URL, but with REAL {z}/{x}/{y}, not %7Bz%7D...
       tileUrl:
-        "https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/e1fb9b66cb87bea8c201c55555e88892-5662852a05d9f35535d024ef3010d237/tiles/{z}/{x}/{y}"
+        "https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/f00cdac132c1a19329e7ab9287e4acb4-ab2feff10d2172157a5e820177d19bf9/tiles/{z}/{x}/{y}"
     }
   ];
 
@@ -61,8 +62,8 @@ export default function Map() {
     map.current.addControl(new maplibregl.NavigationControl(), "top-right");
 
     map.current.on("load", () => {
+      // --- Add GEE raster layers ---
       layers.forEach(layer => {
-        // either explicit tileUrl or build from mapid
         const tileUrl = layer.tileUrl
           ? layer.tileUrl
           : `https://earthengine.googleapis.com/v1/projects/exalted-cogency-474817-i7/maps/${layer.mapid}/tiles/{z}/{x}/{y}`;
@@ -86,6 +87,7 @@ export default function Map() {
         });
       });
 
+      // --- Fit to estate bounds (same as before) ---
       map.current.fitBounds(
         [
           [94.8380, 26.9750],
@@ -93,8 +95,28 @@ export default function Map() {
         ],
         { padding: 40, animate: true }
       );
+
+      // --- Click handler: set destination + marker ---
+      map.current.on("click", (e) => {
+        const dest = [e.lngLat.lng, e.lngLat.lat]; // [lng, lat]
+        setDestCoords(dest);
+
+        // Add / update destination marker
+        if (destMarkerRef.current) {
+          destMarkerRef.current.remove();
+        }
+        destMarkerRef.current = new maplibregl.Marker({ color: "#e11d48" })
+          .setLngLat(dest)
+          .addTo(map.current);
+      });
     });
   }, [API_KEY, selectedLayerId]);
+
+  // ----------------- Google Maps URL -----------------
+  // destCoords is [lng, lat]; Google needs "lat,lng"
+  const gmapsUrl = destCoords
+    ? `https://www.google.com/maps/dir/?api=1&destination=${destCoords[1]},${destCoords[0]}&travelmode=walking`
+    : null;
 
   // ----------------- UI: Panel (left) + Map (right) -----------------
   return (
@@ -109,6 +131,29 @@ export default function Map() {
           <b>?layer=</b> (e.g. <b>meanNDVI</b>, <b>s1VV</b>, <b>rainfall</b>,{" "}
           <b>pluckReady</b>).
         </p>
+
+        <p>
+          <b>Navigation:</b> click anywhere on the map to set a destination.
+          Then open walking directions in Google Maps from your current
+          location to that point.
+        </p>
+
+        {/* Google Maps directions button */}
+        <div style={{ marginTop: 10, marginBottom: 14 }}>
+          <a
+            href={gmapsUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              if (!gmapsUrl) e.preventDefault();
+            }}
+            className={`gmaps-button ${!gmapsUrl ? "gmaps-button-disabled" : ""}`}
+          >
+            {gmapsUrl
+              ? "Open in Google Maps"
+              : "Click on the map to set destination"}
+          </a>
+        </div>
 
         <hr className="panel-separator" />
 
