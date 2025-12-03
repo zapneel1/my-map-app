@@ -32,9 +32,7 @@ export default function Map() {
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/hybrid/style.json?key=${API_KEY}`,
-      center: [lng, lat],
-      zoom: zoom
+      style: `https://api.maptiler.com/maps/hybrid/style.json?key=${API_KEY}`
     });
 
     map.current.addControl(new maplibregl.NavigationControl(), "top-right");
@@ -51,6 +49,16 @@ export default function Map() {
           ],
           tileSize: 256
         });
+
+      // Auto-zoom to AOI bounds
+        map.current.fitBounds([
+          [94.8380, 26.9750],  // southwest corner
+          [94.8426, 26.9801]   // northeast corner
+        ], {
+          padding: 40,
+          animate: true
+        });
+
 
         map.current.addLayer({
           id: layer.id,
