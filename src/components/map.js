@@ -155,8 +155,6 @@ export default function Map() {
           </a>
         </div>
 
-        <hr className="panel-separator" />
-
         <div className="legend-block">
           <h2>NDVI (Tea Health)</h2>
           <div className="legend-bar legend-ndvi"></div>
